@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>Получить Фибоначи</title>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="" class="brand-logo center">Получить Фибоначи</a>
+        </div>
+    </nav>
+    <section id="app">
+        <div class="container">
+            <h2>Результат:</h2>
+            <h2>{{result}}</h2>
+            <a @click=send(result) class="waves-effect waves-light btn">Получить Число</a>
+            <p v-if="err">Ошибка:{{err}}</p>
+
+        </div>
+        <div class="container">
+            <div v-for="item in arr" :key='choise' class="row">
+                <div class="col s1 grid-example">
+                    <span class="flow-text"> {{item}}</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                choise: 0,
+                result: 0,
+                err: '',
+                arr: []
+            },
+            methods: {
+
+                send(choise) {
+
+
+                    axios.post('/get_fibonachi', { data: this.choise })
+                        .then(res => {
+                            console.log(res)
+                            this.choise++
+                            this.result = res.data
+                            this.arr.unshift(res.data)
+                        
+                        })
+                        .catch(e => {
+                            console.log(e)
+
+                        });
+                }
+
+            }
+        })
+    </script>
+    <style>
+        .container {
+            display: grid;
+            margin-top: 30px;
+            justify-content: center;
+            text-align: center;
+
+        }
+        .btn{
+            margin-top: 20px;
+        }
+    </style>
+</body>
+
+</html>
